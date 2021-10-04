@@ -26,7 +26,7 @@ class ReaderTest {
     }
 
     @Test
-    void shouldReturnWordsCountedThreeOneToOne() throws IOException {
+    void shouldReturnCorrectWordCountForSingleOccurrences() throws IOException {
         //given
         String filePath = "text.txt";
         //when
@@ -99,6 +99,8 @@ class ReaderTest {
         assertTrue(actual.containsKey("course"));
         assertTrue(actual.containsKey("word"));
 
+        assertFalse(actual.containsKey(""));
+
         assertEquals(1L, actual.get("string"));
         assertEquals(1L, actual.get("verification"));
         assertEquals(1L, actual.get("course"));
@@ -169,6 +171,8 @@ class ReaderTest {
         for (int i = 0; i < GrammarConstraints.PRONOUNS.length; i++) {
             assertFalse(actual.containsKey(GrammarConstraints.PRONOUNS[i]));
         }
+        assertTrue(actual.containsKey("proper"));
+        assertTrue(actual.containsKey("word"));
     }
 
     @ParameterizedTest
@@ -211,6 +215,17 @@ class ReaderTest {
         IllegalArgumentException actual = Assertions.assertThrows(IllegalArgumentException.class, () -> subject.execute(wrongFilePath));
 
         String expected = "The file named " + wrongFilePath + " does not exist !";
+        assertEquals(expected, actual.getMessage());
+    }
+
+    @Test
+    void shouldPrintAMessageAboutLackOfFile() {
+        // given
+        String[] filePaths = {""};
+        // when
+        IllegalArgumentException actual = Assertions.assertThrows(IllegalArgumentException.class, () -> subject.execute(filePaths));
+        // then
+        String expected = "No input files has been provided !";
         assertEquals(expected, actual.getMessage());
     }
 }

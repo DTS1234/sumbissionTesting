@@ -18,6 +18,11 @@ public class TextProperties {
 
     @Override
     public String toString() {
+
+        if (getWordsMapString().isEmpty()){
+            return "FILE NAME " + fileName + " was empty.";
+        }
+
         return "TextProperties { \nword : count = \n" + getWordsMapString() +
                 "FILE NAME ='" + fileName + '\'' +
                 "\n}";
