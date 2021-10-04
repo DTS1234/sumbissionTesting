@@ -2,12 +2,12 @@ package uep.adam.kazmierczak;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static uep.adam.kazmierczak.GrammarConstraints.*;
 
 /**
  * @author akazmierczak
@@ -15,20 +15,65 @@ import java.util.Map;
  */
 public class Reader {
 
-    public Map<String, Long> execute(String... files) throws IOException {
+    public List<TextProperties> execute(String... files) throws IOException {
 
-        Path path = Paths.get(files[0]);
-        List<String> lines = Files.readAllLines(path.toAbsolutePath());
+        List<TextProperties> result = new ArrayList<>();
+
+        for (int i = 0; i < files.length; i++) {
+
+            Path path = Paths.get(files[i]);
+
+            if (!path.getFileName().toString().endsWith(".txt")) {
+                throw new IllegalArgumentException("The following file : " + path.getFileName() + " is not a .txt file !");
+            }
+
+            List<String> lines;
+
+            try {
+                lines = Files.readAllLines(path.toAbsolutePath());
+            } catch (NoSuchFileException exception) {
+                throw new IllegalArgumentException("The file named " + path.getFileName() + " does not exist !");
+            }
+
+            HashMap<String, Long> stringLongHashMap = new HashMap<>();
+            List<String> wordsAlreadyInFile = new ArrayList<>();
+
+            lines.forEach(line -> {
+                String[] words = line.split(" ");
+                Arrays.stream(words)
+                        .filter(word -> !Arrays.asList(ARTICLES).contains(word))
+                        .filter(word -> !Arrays.asList(PREPOSITIONS).contains(word))
+                        .filter(word -> !Arrays.asList(PRONOUNS).contains(word))
+                        .filter(word -> !isPunctuationChain(word))
+                        .forEach(word -> {
 
 
+                            if (wordsAlreadyInFile.contains(word)) {
+                                increaseWordCount(stringLongHashMap, word);
+                            }
+                            stringLongHashMap.putIfAbsent(word, 1L);
+                            wordsAlreadyInFile.add(word);
 
-        HashMap<String, Long> stringLongHashMap = new HashMap<>();
-        lines.forEach(line -> {
-            String[] words = line.split(" ");
-            Arrays.stream(words).forEach(word -> stringLongHashMap.putIfAbsent(word,1L));
-        } );
+                        });
+            });
 
-        return stringLongHashMap;
+            result.add(new TextProperties(stringLongHashMap, files[i]));
+        }
+
+        return result;
     }
 
+    private void increaseWordCount(HashMap<String, Long> stringLongHashMap, String word) {
+        Long aLong = stringLongHashMap.get(word);
+        stringLongHashMap.put(word, ++aLong);
+    }
+
+    private boolean isPunctuationChain(String text) {
+        for (int i = 0; i < text.length(); i++) {
+            if (!Character.isLetterOrDigit(text.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -6,7 +6,7 @@ package uep.adam.kazmierczak;
  */
 public class GrammarConstraints {
 
-    private static final String[] PRONOUNS = {"all", "another", "any", "anybody", "anyone", "anything", "as", "aught", "both", "each",
+    public static final String[] PRONOUNS = {"all", "another", "any", "anybody", "anyone", "anything", "as", "aught", "both", "each",
             "each other", "either", "enough", "everybody", "everyone", "everything", "few", "he", "her", "hers",
             "herself", "him", "himself", "his", "I", "idem", "it", "its", "itself", "many", "me", "mine", "most",
             "my", "myself", "naught", "neither", "no one", "nobody", "none", "nothing", "nought", "one", "one another",
@@ -22,5 +22,10 @@ public class GrammarConstraints {
     public static final String[] ARTICLES = {"the", "an", "a"};
 
     public static final String[] PREPOSITIONS = {"by", "at", "in", "for", "on", "out", "of"};
+
+    public static final String[] PUNCTUATION = {"!", ".", "\"", "'", "-", "+", ")", "(",
+            "@", "#", "$", "%", "^", "&", "*", "{", "}", "[", "]", "<", ">", "?", "\\", "`", "~", "/", ","
+    };
+
 
 }
