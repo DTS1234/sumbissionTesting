@@ -115,6 +115,68 @@
           }
         }
       }
+    },
+    "/providers" : {
+      "get" : {
+        "tags" : [ "providers" ],
+        "summary" : "Get the providers registered in the marketplace",
+        "operationId" : "getProviders",
+        "parameters" : [ {
+          "name" : "city",
+          "in" : "query",
+          "description" : "City to search garages in",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "start",
+          "in" : "query",
+          "description" : "Result order ID to start width",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "default" : 0
+          }
+        }, {
+          "name" : "count",
+          "in" : "query",
+          "description" : "Number of elements to return",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "default" : 10
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "Content-Location" : {
+                "description" : "URL of the representation. >- E.g. '/providers/?start=0&count=10'",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Provider"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components" : {
@@ -203,6 +265,24 @@
             "example" : 5
           }
         }
+      }
+    },
+    "requestBodies" : {
+      "Product" : {
+        "description" : "Product that needs to be added to the wharehouse",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Product"
+            }
+          },
+          "application/xml" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Product"
+            }
+          }
+        },
+        "required" : true
       }
     }
   }
