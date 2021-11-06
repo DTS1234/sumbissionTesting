@@ -1,0 +1,209 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Product marketplace REST",
+    "description" : "UPM project",
+    "version" : "1"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/UPM-Rest-project/product_marketplace/1",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "products",
+    "description" : "Goods that can be bought at the product marketplace"
+  }, {
+    "name" : "product_categories",
+    "description" : "Categories of the products in the product marketplace."
+  }, {
+    "name" : "providers",
+    "description" : "Products providers that sell their products on the product marketplace"
+  } ],
+  "paths" : {
+    "/products" : {
+      "get" : {
+        "tags" : [ "products" ],
+        "summary" : "Get the products in the product marketplace",
+        "operationId" : "getProducts",
+        "parameters" : [ {
+          "name" : "product category id",
+          "in" : "query",
+          "description" : "Category to get products from",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "product name",
+          "in" : "query",
+          "description" : "Name of the product",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "priceLimitLowerThan",
+          "in" : "query",
+          "description" : "Elements with the price limit equals or lower",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        }, {
+          "name" : "priceGreaterThan",
+          "in" : "query",
+          "description" : "Elements with the price limit equals or greater",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        }, {
+          "name" : "stockLowerThan",
+          "in" : "query",
+          "description" : "Products with stock equals or lower to",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "stockGreaterThan",
+          "in" : "query",
+          "description" : "Products with stock equals or higher to",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "default" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "Content-Location" : {
+                "description" : "URL of the representation. E.g. http://server.com/api/products/?start=0&count=10",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Product"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Product" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "stock" : {
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "price" : {
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "productCategory" : {
+            "$ref" : "#/components/schemas/ProductCategory"
+          },
+          "providers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Product_providers"
+            }
+          }
+        }
+      },
+      "Provider" : {
+        "type" : "object",
+        "properties" : {
+          "firstname" : {
+            "type" : "string"
+          },
+          "lastname" : {
+            "type" : "string"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Provider_products"
+            }
+          }
+        }
+      },
+      "ProductCategory" : {
+        "type" : "object",
+        "properties" : {
+          "categoryName" : {
+            "type" : "string"
+          },
+          "categoryDescription" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "Product_providers" : {
+        "type" : "object",
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "example" : "https://virtserver.swaggerhub.com/UPM-Rest-project/product_marketplace/1.0.0/provider/11"
+          },
+          "id" : {
+            "type" : "integer",
+            "example" : 11
+          }
+        }
+      },
+      "Provider_products" : {
+        "type" : "object",
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "example" : "https://virtserver.swaggerhub.com/UPM-Rest-project/product_marketplace/1.0.0/product/5"
+          },
+          "id" : {
+            "type" : "integer",
+            "example" : 5
+          }
+        }
+      }
+    }
+  }
+}
